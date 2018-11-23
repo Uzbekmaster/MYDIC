@@ -3,6 +3,9 @@ package uz.dictlocker.mydic;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.view.View;
 import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
@@ -19,21 +22,15 @@ public class MainActivity extends AppCompatActivity
 
     MenuItem menuSetting;
 
+    DictionaryFragment dictionaryFragment;
+    BookmarkFragment bookmarkFragment;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -43,6 +40,10 @@ public class MainActivity extends AppCompatActivity
 
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
+
+        dictionaryFragment = new DictionaryFragment();
+        bookmarkFragment = new BookmarkFragment();
+        goToFragment(dictionaryFragment,true);
     }
 
     @Override
@@ -61,6 +62,10 @@ public class MainActivity extends AppCompatActivity
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.main, menu);
         menuSetting = menu.findItem(R.id.action_settings);
+        String id = Global.getState(this, "dic_type");
+        if (id != null) {
+            onOptionsItemSelected(menu.findItem(Integer.valueOf(id)));
+        }
         return true;
     }
 
@@ -71,14 +76,16 @@ public class MainActivity extends AppCompatActivity
         // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
 
+        Global.saveState(this, "dic_type", String.valueOf(id));
+
         //noinspection SimplifiableIfStatement
         if (id == R.id.action_eng_kh) {
             menuSetting.setIcon(R.drawable.english_khmer_1);
-        }else if (id == R.id.action_kh_eng) {
+        } else if (id == R.id.action_kh_eng) {
             menuSetting.setIcon(R.drawable.khmer_english_1);
-        }else if (id == R.id.action_kh_kh) {
+        } else if (id == R.id.action_kh_kh) {
             menuSetting.setIcon(R.drawable.khmer_khmer_1);
-        }else {
+        } else {
             Toast.makeText(this, "Unknown action", Toast.LENGTH_SHORT).show();
             return true;
         }
@@ -90,10 +97,21 @@ public class MainActivity extends AppCompatActivity
     public boolean onNavigationItemSelected(MenuItem item) {
         // Handle navigation view item clicks here.
         int id = item.getItemId();
-
-
+        if(id==R.id.action_bookmark){
+            goToFragment(bookmarkFragment,false);
+        }
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         drawer.closeDrawer(GravityCompat.START);
         return true;
+    }
+
+    public void goToFragment(Fragment fragment, boolean isTop) {
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+
+        fragmentTransaction.replace(R.id.fragment_container, fragment);
+        if (!isTop)
+            fragmentTransaction.addToBackStack(null);
+        fragmentTransaction.commit();
     }
 }

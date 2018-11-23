@@ -26,7 +26,6 @@
                 android:id="@+id/action_kh_kh"
                 app:showAsAction="never"
                 android:orderInCategory="100"/>
-
         </menu>
     </item>
 </menu>
