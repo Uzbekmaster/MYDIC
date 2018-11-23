@@ -4,6 +4,28 @@
     <item
         android:id="@+id/action_settings"
         android:orderInCategory="100"
-        android:title="@string/action_settings"
-        app:showAsAction="never" />
+        android:icon="@drawable/ic_more"
+        android:title=""
+        app:showAsAction="always">
+        <menu>
+            <item
+                android:title="English - Khemer"
+                android:icon="@drawable/english_khmer"
+                android:id="@+id/action_eng_kh"
+                app:showAsAction="never"
+                android:orderInCategory="100"/>
+            <item
+                android:title="Khemer - English"
+                android:icon="@drawable/khmer_english"
+                android:id="@+id/action_kh_eng"
+                app:showAsAction="never"
+                android:orderInCategory="100"/>
+            <item
+                android:title="Khemer - Khemer"
+                 android:icon="@drawable/khmer_khmer"
+                android:id="@+id/action_kh_kh"
+                app:showAsAction="never"
+                android:orderInCategory="100"/>
+        </menu>
+    </item>
 </menu>
