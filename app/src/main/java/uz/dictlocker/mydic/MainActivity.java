@@ -44,6 +44,20 @@ public class MainActivity extends AppCompatActivity
         dictionaryFragment = new DictionaryFragment();
         bookmarkFragment = new BookmarkFragment();
         goToFragment(dictionaryFragment,true);
+
+        dictionaryFragment.setOnFragmentListener(new FragmentListener() {
+            @Override
+            public void onItemClick() {
+                goToFragment(new DetailFragment(),false);
+            }
+        });
+
+//        bookmarkFragment.setOnFragmentListener(new FragmentListener() {
+//            @Override
+//            public void onItemClick() {
+//                goToFragment(new DetailFragment(),false);
+//            }
+//        });
     }
 
     @Override
